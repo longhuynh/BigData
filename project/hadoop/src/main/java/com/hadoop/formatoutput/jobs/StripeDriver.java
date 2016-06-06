@@ -2,8 +2,8 @@ package com.hadoop.formatoutput.jobs;
 
 import com.hadoop.dto.SortedStripe;
 import com.hadoop.dto.Stripe;
-import com.hadoop.formatoutput.reducers.StripeCrfReducer;
-import com.hadoop.mappers.StripeCrfMapper;
+import com.hadoop.formatoutput.reducers.StripeReducer;
+import com.hadoop.mappers.StripeMapper;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -13,7 +13,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class StripeCrfDriver {
+public class StripeDriver {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 
@@ -26,13 +26,13 @@ public class StripeCrfDriver {
 		Path outputPath = new Path(args[1]);
 		
 		Job job = new Job(conf, "wordcountstripecrf");
-		job.setJarByClass(PairCrfDriver.class);
+		job.setJarByClass(PairDriver.class);
 		
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 		
-		job.setMapperClass(StripeCrfMapper.class);
-		job.setReducerClass(StripeCrfReducer.class);
+		job.setMapperClass(StripeMapper.class);
+		job.setReducerClass(StripeReducer.class);
 		
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Stripe.class);

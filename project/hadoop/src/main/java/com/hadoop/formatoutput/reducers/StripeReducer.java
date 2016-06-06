@@ -13,7 +13,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class StripeCrfReducer extends Reducer<Text, Stripe, Text, SortedStripe> {
+public class StripeReducer extends Reducer<Text, Stripe, Text, SortedStripe> {
 	private final static DoubleWritable ZERO = new DoubleWritable(0);
 	
 	@SuppressWarnings("rawtypes")

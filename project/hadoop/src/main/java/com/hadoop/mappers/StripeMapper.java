@@ -11,7 +11,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 //import org.apache.log4j.Logger;
 
-public class StripeCrfMapper extends Mapper<LongWritable, Text, Text, Stripe> {
+public class StripeMapper extends Mapper<LongWritable, Text, Text, Stripe> {
 //	private static final Logger LOG = Logger.getLogger(StripeCrfMapper.class);
 	private final static IntWritable ONE = new IntWritable(1);
 	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");

@@ -1,5 +1,7 @@
 package com.hadoop.mappers;
 
+import com.hadoop.dto.Pair;
+
 import java.io.IOException;
 import java.util.regex.Pattern;
 
@@ -9,13 +11,11 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 //import org.apache.log4j.Logger;
 
-
-import com.hadoop.dto.Pair;
-
-public class HybridCrfMapper extends Mapper<LongWritable, Text, Pair, IntWritable> {
-//	private static final Logger LOG = Logger.getLogger(HybridCrfMapper.class);
-	private final static IntWritable ONE = new IntWritable(1);
+public class PairMapper extends Mapper<LongWritable, Text, Pair, IntWritable> {
+//	private static final Logger LOG = Logger.getLogger(PairCrfMapper.class);
+	private final static IntWritable one = new IntWritable(1);
 	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
+	private static final String STAR_SYMBOL = "*";
 	/*
 	 * Let the neighborhoods of X, N(X) be set of all term after X and before the next X
 	 */
@@ -37,8 +37,11 @@ public class HybridCrfMapper extends Mapper<LongWritable, Text, Pair, IntWritabl
 				for (j = i + 1; j < len; j++) {
 					if (arr[j] != null && !arr[j].isEmpty()) {
 						if (!arr[i].equals(arr[j])) {
-							context.write(new Pair(arr[i], arr[j]), ONE);
+							context.write(new Pair(arr[i], arr[j]), one);
 							//LOG.debug(new Pair(new Text(arr[i]), new Text(arr[j])).toString() + ", 1.");
+							
+							context.write(new Pair(arr[i], STAR_SYMBOL), one);
+							//LOG.debug(new Pair(new Text(arr[i]), new Text(STAR_SYMBOL)).toString() + ", 1.");
 						}
 						else {
 							break;

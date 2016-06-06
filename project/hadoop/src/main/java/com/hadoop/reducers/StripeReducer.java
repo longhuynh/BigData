@@ -11,7 +11,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class StripeCrfReducer extends Reducer<Text, Stripe, Text, Stripe> {
+public class StripeReducer extends Reducer<Text, Stripe, Text, Stripe> {
 	private final static DoubleWritable ZERO = new DoubleWritable(0);
 	
 	@Override
