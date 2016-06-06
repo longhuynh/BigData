@@ -1,18 +1,17 @@
-package com.myhadoop.dto;
+package com.hadoop.dto;
 
 import java.util.Iterator;
 
-import org.apache.hadoop.io.SortedMapWritable;
+import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.Writable;
 
-public class SortedStripe extends SortedMapWritable {
+public class Stripe extends MapWritable {
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("[ ");
-		Iterator<WritableComparable> it = keySet().iterator();
+		Iterator<Writable> it = keySet().iterator();
 		while(it.hasNext()) {
 			Text t = (Text) it.next();
 			String val = get(t).toString();

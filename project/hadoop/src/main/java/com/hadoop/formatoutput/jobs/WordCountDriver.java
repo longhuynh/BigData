@@ -1,7 +1,7 @@
-package com.myhadoop.formatoutput.jobs;
+package com.hadoop.formatoutput.jobs;
 
-import com.myhadoop.mappers.WordCountMapper;
-import com.myhadoop.formatoutput.reducers.WordCountReducer;
+import com.hadoop.formatoutput.reducers.WordCountReducer;
+import com.hadoop.mappers.WordCountMapper;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;

@@ -1,19 +1,20 @@
-package com.myhadoop.jobs;
+package com.hadoop.jobs;
 
-import com.myhadoop.dto.Pair;
-import com.myhadoop.mappers.PairCrfMapper;
-import com.myhadoop.reducers.PairCrfReducer;
+import com.hadoop.dto.Pair;
+import com.hadoop.dto.Stripe;
+import com.hadoop.mappers.HybridCrfMapper;
+import com.hadoop.reducers.HybridCrfReducer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class PairCrfDriver {
+public class HybridCrfDriver {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
@@ -26,20 +27,20 @@ public class PairCrfDriver {
 		Path inputPath = new Path(args[0]);
 		Path outputPath = new Path(args[1]);
 		
-		Job job = new Job(conf, "wordcountpaircrf");
-		job.setJarByClass(PairCrfDriver.class);
+		Job job = new Job(conf, "wordcounthybridcrf");
+		job.setJarByClass(HybridCrfDriver.class);
 		
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 		
-		job.setMapperClass(PairCrfMapper.class);
-		job.setReducerClass(PairCrfReducer.class);
+		job.setMapperClass(HybridCrfMapper.class);
+		job.setReducerClass(HybridCrfReducer.class);
 		
 		job.setMapOutputKeyClass(Pair.class);
 		job.setMapOutputValueClass(IntWritable.class);
 		
-		job.setOutputKeyClass(Pair.class);
-		job.setOutputValueClass(DoubleWritable.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Stripe.class);
 		
 		// delete output if exits
 		FileSystem hdfs = FileSystem.get(conf);

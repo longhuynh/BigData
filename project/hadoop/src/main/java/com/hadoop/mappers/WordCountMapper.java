@@ -1,4 +1,4 @@
-package com.myhadoop.mappers;
+package com.hadoop.mappers;
 
 import java.io.IOException;
 import java.util.regex.Pattern;

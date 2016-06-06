@@ -1,6 +1,6 @@
-package com.myhadoop.reducers;
+package com.hadoop.reducers;
 
-import com.myhadoop.dto.Pair;
+import com.hadoop.dto.Pair;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

@@ -1,4 +1,4 @@
-package com.myhadoop.reducers;
+package com.hadoop.reducers;
 
 import java.io.IOException;
 

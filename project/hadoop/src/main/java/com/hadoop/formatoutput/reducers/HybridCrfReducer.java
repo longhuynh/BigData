@@ -1,4 +1,4 @@
-package com.myhadoop.formatoutput.reducers;
+package com.hadoop.formatoutput.reducers;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -10,8 +10,8 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import com.myhadoop.dto.Pair;
-import com.myhadoop.dto.SortedStripe;
+import com.hadoop.dto.Pair;
+import com.hadoop.dto.SortedStripe;
 
 public class HybridCrfReducer extends Reducer<Pair, IntWritable, Text, SortedStripe> {
 	private SortedStripe stripeHf;

@@ -1,4 +1,4 @@
-package com.myhadoop.dto;
+package com.hadoop.dto;
 
 import java.io.DataInput;
 import java.io.DataOutput;

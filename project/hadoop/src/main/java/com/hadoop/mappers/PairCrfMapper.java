@@ -1,6 +1,6 @@
-package com.myhadoop.mappers;
+package com.hadoop.mappers;
 
-import com.myhadoop.dto.Stripe;
+import com.hadoop.dto.Pair;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -11,10 +11,11 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 //import org.apache.log4j.Logger;
 
-public class StripeCrfMapper extends Mapper<LongWritable, Text, Text, Stripe> {
-//	private static final Logger LOG = Logger.getLogger(StripeCrfMapper.class);
-	private final static IntWritable ONE = new IntWritable(1);
+public class PairCrfMapper extends Mapper<LongWritable, Text, Pair, IntWritable> {
+//	private static final Logger LOG = Logger.getLogger(PairCrfMapper.class);
+	private final static IntWritable one = new IntWritable(1);
 	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
+	private static final String STAR_SYMBOL = "*";
 	/*
 	 * Let the neighborhoods of X, N(X) be set of all term after X and before the next X
 	 */
@@ -29,36 +30,24 @@ public class StripeCrfMapper extends Mapper<LongWritable, Text, Text, Stripe> {
 		String[] arr = WORD_BOUNDARY.split(line);
 		
 		int len = arr.length;
-		int w = 0;
-		int u = 0;
-		Stripe stripeH;
-		
-		for (; w < len - 1; w++) {
-			if (arr[w] != null && !arr[w].isEmpty()) {
-				stripeH = new Stripe();
-				
-				for (u = w + 1; u < len; u++) {
-					if (arr[u] != null && !arr[u].isEmpty()) {
-						if (!arr[w].equals(arr[u])) {
-							Text t = new Text(arr[u]);
-							IntWritable tempInt = (IntWritable) stripeH.get(t);
+		int i = 0;
+		int j = 0;
+		for (; i < len - 1; i++) {
+			if (arr[i] != null && !arr[i].isEmpty()) {
+				for (j = i + 1; j < len; j++) {
+					if (arr[j] != null && !arr[j].isEmpty()) {
+						if (!arr[i].equals(arr[j])) {
+							context.write(new Pair(arr[i], arr[j]), one);
+							//LOG.debug(new Pair(new Text(arr[i]), new Text(arr[j])).toString() + ", 1.");
 							
-							if (tempInt == null) {
-								tempInt = ONE;
-							}
-							else {
-								tempInt = new IntWritable(tempInt.get() + 1);
-							}
-							
-							stripeH.put(t, tempInt);
+							context.write(new Pair(arr[i], STAR_SYMBOL), one);
+							//LOG.debug(new Pair(new Text(arr[i]), new Text(STAR_SYMBOL)).toString() + ", 1.");
 						}
 						else {
 							break;
 						}
 					}
 				}
-				
-				context.write(new Text(arr[w]), stripeH);
 			}
 		}
 	}

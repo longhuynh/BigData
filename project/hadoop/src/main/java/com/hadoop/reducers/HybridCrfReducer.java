@@ -1,4 +1,4 @@
-package com.myhadoop.reducers;
+package com.hadoop.reducers;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -9,8 +9,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import com.myhadoop.dto.Pair;
-import com.myhadoop.dto.Stripe;
+import com.hadoop.dto.Pair;
+import com.hadoop.dto.Stripe;
 
 public class HybridCrfReducer extends Reducer<Pair, IntWritable, Text, Stripe> {
 	private Stripe stripeHf;

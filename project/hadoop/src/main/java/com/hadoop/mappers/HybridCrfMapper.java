@@ -1,4 +1,4 @@
-package com.myhadoop.mappers;
+package com.hadoop.mappers;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -9,7 +9,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 //import org.apache.log4j.Logger;
 
-import com.myhadoop.dto.Pair;
+
+import com.hadoop.dto.Pair;
 
 public class HybridCrfMapper extends Mapper<LongWritable, Text, Pair, IntWritable> {
 //	private static final Logger LOG = Logger.getLogger(HybridCrfMapper.class);

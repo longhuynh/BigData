@@ -1,4 +1,4 @@
-package com.myhadoop.formatoutput.reducers;
+package com.hadoop.formatoutput.reducers;
 
 import java.io.IOException;
 

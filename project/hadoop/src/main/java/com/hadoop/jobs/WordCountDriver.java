@@ -1,7 +1,7 @@
-package com.myhadoop.jobs;
+package com.hadoop.jobs;
 
-import com.myhadoop.mappers.WordCountMapper;
-import com.myhadoop.reducers.WordCountReducer;
+import com.hadoop.mappers.WordCountMapper;
+import com.hadoop.reducers.WordCountReducer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;

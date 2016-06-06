@@ -1,22 +1,19 @@
-package com.myhadoop.jobs;
+package com.hadoop.formatoutput.jobs;
 
-import com.myhadoop.dto.Stripe;
-import com.myhadoop.mappers.HybridCrfMapper;
-import com.myhadoop.reducers.HybridCrfReducer;
+import com.hadoop.dto.SortedStripe;
+import com.hadoop.dto.Stripe;
+import com.hadoop.formatoutput.reducers.StripeCrfReducer;
+import com.hadoop.mappers.StripeCrfMapper;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import com.myhadoop.dto.Pair;
-
-public class HybridCrfDriver {
-
+public class StripeCrfDriver {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 
@@ -28,20 +25,20 @@ public class HybridCrfDriver {
 		Path inputPath = new Path(args[0]);
 		Path outputPath = new Path(args[1]);
 		
-		Job job = new Job(conf, "wordcounthybridcrf");
-		job.setJarByClass(HybridCrfDriver.class);
+		Job job = new Job(conf, "wordcountstripecrf");
+		job.setJarByClass(PairCrfDriver.class);
 		
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
 		
-		job.setMapperClass(HybridCrfMapper.class);
-		job.setReducerClass(HybridCrfReducer.class);
+		job.setMapperClass(StripeCrfMapper.class);
+		job.setReducerClass(StripeCrfReducer.class);
 		
-		job.setMapOutputKeyClass(Pair.class);
-		job.setMapOutputValueClass(IntWritable.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Stripe.class);
 		
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Stripe.class);
+		job.setOutputValueClass(SortedStripe.class);
 		
 		// delete output if exits
 		FileSystem hdfs = FileSystem.get(conf);

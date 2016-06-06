@@ -1,7 +1,6 @@
-package com.myhadoop.formatoutput.reducers;
+package com.hadoop.reducers;
 
-import com.myhadoop.dto.SortedStripe;
-import com.myhadoop.dto.Stripe;
+import com.hadoop.dto.Stripe;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -10,22 +9,18 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class StripeCrfReducer extends Reducer<Text, Stripe, Text, SortedStripe> {
+public class StripeCrfReducer extends Reducer<Text, Stripe, Text, Stripe> {
 	private final static DoubleWritable ZERO = new DoubleWritable(0);
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected void reduce(Text w, Iterable<Stripe> stripes, Context context)
 			throws IOException, InterruptedException {
 		int total = 0;
 		int h_t;
-		SortedStripe stripeHf = new SortedStripe();
+		Stripe stripeHf = new Stripe();
 		Iterator<Writable> iterator;
-		Iterator<WritableComparable> sortedIterator;
-		StringBuffer sb;
 		
 		for (Stripe stripeH : stripes) {
 			iterator = stripeH.keySet().iterator();
@@ -54,26 +49,16 @@ public class StripeCrfReducer extends Reducer<Text, Stripe, Text, SortedStripe> 
 			//context.write(w, stripeH);
 		}
 		
-		// return Text instead of DoubleWritable as above
-		SortedStripe newHf = new SortedStripe();
-		sortedIterator = stripeHf.keySet().iterator();
-		while (sortedIterator.hasNext()) {
-			Text t = (Text) sortedIterator.next();
+		iterator = stripeHf.keySet().iterator();
+		while (iterator.hasNext()) {
+			Text t = (Text) iterator.next();
 			
-			DoubleWritable tempVal = (DoubleWritable) stripeHf.get(t);
-			
-			// return new Strip<Text, Text> instead of Stripe<Text, DoubleWritable>
-			double d = tempVal.get();
-			sb = new StringBuffer();
-			newHf.put(t, new Text(
-					sb.append(String.valueOf((int) d)).append("/").append(String.valueOf(total)).toString()));
+			DoubleWritable val = (DoubleWritable) stripeHf.get(t);
 			
 			// update Hf{t} = Hf{t}/total
-			tempVal.set(tempVal.get()/total);
+			val.set(val.get()/total);
 		}
-		context.write(w, newHf);
-		// if needed, you can return DoubleWritable whenever you want
-		//context.write(w, stripeHf);
+		context.write(w, stripeHf);
 		
 	}
 
