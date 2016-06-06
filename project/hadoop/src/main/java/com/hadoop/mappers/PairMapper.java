@@ -1,7 +1,6 @@
 package com.hadoop.mappers;
 
 import com.hadoop.dto.Pair;
-
 import java.io.IOException;
 import java.util.regex.Pattern;
 
