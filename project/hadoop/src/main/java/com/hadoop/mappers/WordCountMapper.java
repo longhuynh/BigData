@@ -30,11 +30,12 @@ import org.apache.hadoop.io.Text;
 //	}
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+public class WordCountMapper extends
+		Mapper<LongWritable, Text, Text, IntWritable> {
 	private final static IntWritable one = new IntWritable(1);
 	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
-	
-	public void map(LongWritable offset, Text lineText, Context context) 
+
+	public void map(LongWritable offset, Text lineText, Context context)
 			throws IOException, InterruptedException {
 		String line = lineText.toString();
 		Text currentWord = new Text();
@@ -46,5 +47,4 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
 			context.write(currentWord, one);
 		}
 	}
-
 }

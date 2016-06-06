@@ -26,25 +26,23 @@ public class HybridReducer extends Reducer<Pair, IntWritable, Text, SortedStripe
 		}
 		
 		// Element-wise sum: SUM(H{p.w}, new Pair(p.u, sum) 
-		Text pair_W = new Text(pair.getKey());
-		Text pair_U = new Text(pair.getValue());
-		SortedStripe stripeH = (SortedStripe) stripeHf.get(pair_W);
+		Text pairW = new Text(pair.getKey());
+		Text pairU = new Text(pair.getValue());
+		SortedStripe stripeH = (SortedStripe) stripeHf.get(pairW);
 		if (stripeH == null) {
 			stripeH = new SortedStripe();
-			stripeH.put(pair_U, new DoubleWritable(sum));
+			stripeH.put(pairU, new DoubleWritable(sum));
 		}
 		else {
-//			stripeH.put(pair_U, new DoubleWritable(((DoubleWritable) stripeH.get(pair_U)).get() + sum));
-			DoubleWritable tempVal = (DoubleWritable) stripeH.get(pair_U);
+			DoubleWritable tempVal = (DoubleWritable) stripeH.get(pairU);
 			if (tempVal == null) {
-				stripeH.put(pair_U, new DoubleWritable(sum));
+				stripeH.put(pairU, new DoubleWritable(sum));
 			}
 			else {
 				tempVal.set(tempVal.get() + sum);
 			}
 		}
-		stripeHf.put(pair_W, stripeH);
-//		context.write(pair.getKey(), stripeHf);
+		stripeHf.put(pairW, stripeH);
 	}
 
 	@Override

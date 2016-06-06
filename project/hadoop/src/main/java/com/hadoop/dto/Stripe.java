@@ -12,14 +12,15 @@ public class Stripe extends MapWritable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer("[ ");
 		Iterator<Writable> it = keySet().iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			Text t = (Text) it.next();
 			String val = get(t).toString();
-			sb.append("(").append(t.toString()).append(", ").append(val).append("), ");
+			sb.append("(").append(t.toString()).append(", ").append(val)
+					.append("), ");
 		}
 		sb.setLength(sb.length() - 2);
 		sb.append(" ]");
-		
+
 		return sb.toString();
 	}
 

@@ -37,21 +37,21 @@ public class Pair implements WritableComparable<Pair> {
 	}
 
 	@Override
-	public void readFields(DataInput arg0) throws IOException {
-		if (arg0 == null) {
+	public void readFields(DataInput arg) throws IOException {
+		if (arg == null) {
 			throw new IllegalArgumentException("Input cannot be NULL.");
 		}
-		this.key = arg0.readUTF();
-		this.value = arg0.readUTF();
+		this.key = arg.readUTF();
+		this.value = arg.readUTF();
 	}
 
 	@Override
-	public void write(DataOutput arg0) throws IOException {
-		if (arg0 == null) {
+	public void write(DataOutput arg) throws IOException {
+		if (arg == null) {
 			throw new IllegalArgumentException("Output cannot be NULL.");
 		}
-		arg0.writeUTF(this.key);
-		arg0.writeUTF(this.value);
+		arg.writeUTF(this.key);
+		arg.writeUTF(this.value);
 	}
 
 	@Override
@@ -91,5 +91,4 @@ public class Pair implements WritableComparable<Pair> {
 				.append(")");
 		return sb.toString();
 	}
-
 }
