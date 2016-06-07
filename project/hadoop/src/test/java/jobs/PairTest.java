@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class PairCrfTest {
+public class PairTest {
 	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
 	private static final String STAR_SYMBOL = "*";
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException,
+			InterruptedException {
 		String line;
 		String[] arr;
 		int len;
@@ -45,9 +46,6 @@ public class PairCrfTest {
 				}
 			}
 		}
-		
-		
 
 	}
-
 }

@@ -27,10 +27,7 @@ public class PairReducer extends Reducer<Pair, IntWritable, Pair, DoubleWritable
 		else {
 			double d = new Double(sum)/total;
 			context.write(pair, new DoubleWritable(d));
-//			DecimalFormat twoDForm = new DecimalFormat("#.00");
-//			twoDForm.format(d);	// it will return String
 		}
-//		context.write(pair, new DoubleWritable(new Double(sum)));
 	}
 
 	@Override

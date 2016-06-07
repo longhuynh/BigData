@@ -27,7 +27,7 @@ public class HybridDriver {
 		Path inputPath = new Path(args[0]);
 		Path outputPath = new Path(args[1]);
 		
-		Job job = new Job(conf, "wordcounthybridcrf");
+		Job job = new Job(conf, "wordcounthybrid");
 		job.setJarByClass(HybridDriver.class);
 		
 		FileInputFormat.addInputPath(job, inputPath);

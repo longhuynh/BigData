@@ -26,7 +26,7 @@ public class PairDriver {
 		Path inputPath = new Path(args[0]);
 		Path outputPath = new Path(args[1]);
 		
-		Job job = new Job(conf, "wordcountpaircrf");
+		Job job = new Job(conf, "wordcountpair");
 		job.setJarByClass(PairDriver.class);
 		
 		FileInputFormat.addInputPath(job, inputPath);

@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class StripeCrfTest {
+public class StripeTest {
 	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException,
+			InterruptedException {
 		String line;
 		String[] arr;
 		int len;
@@ -33,48 +34,48 @@ public class StripeCrfTest {
 			for (; w < len - 1; w++) {
 				if (arr[w] != null && !arr[w].isEmpty()) {
 					stripeH = new HashMap<String, Integer>();
-					
+
 					for (u = w + 1; u < len; u++) {
 						if (arr[u] != null && !arr[u].isEmpty()) {
 							if (!arr[w].equals(arr[u])) {
-//								if (stripeH.containsKey(new Text(arr[u]))) {
-//									stripeH.put(new Text(arr[u]), new IntWritable(
-//											((IntWritable) stripeH.get(arr[u])).get() + 1));
-//								}
-//								else {
-//									stripeH.put(new Text(arr[u]), ONE);
-//								}
+								// if (stripeH.containsKey(new Text(arr[u]))) {
+								// stripeH.put(new Text(arr[u]), new
+								// IntWritable(
+								// ((IntWritable) stripeH.get(arr[u])).get() +
+								// 1));
+								// }
+								// else {
+								// stripeH.put(new Text(arr[u]), ONE);
+								// }
 								String t = arr[u];
 								int tempInt;
-								
+
 								if (stripeH.get(t) == null) {
 									tempInt = 0;
 									stripeH.put(t, tempInt);
-								}
-								else {
+								} else {
 									tempInt = stripeH.get(t);
 								}
-								
+
 								stripeH.put(t, tempInt + 1);
-							}
-							else {
+							} else {
 								break;
 							}
 						}
 					}
-					
+
 					System.out.print("(" + arr[w] + ", ");
 					Iterator<String> it = stripeH.keySet().iterator();
 					while (it.hasNext()) {
 						String key = (String) it.next();
 						int value = stripeH.get(key);
-						System.out.print("(" + key + ", " + String.valueOf(value) + "), ");
+						System.out.print("(" + key + ", "
+								+ String.valueOf(value) + "), ");
 					}
 					System.out.println("), ");
 				}
 			}
 		}
-		
 
 	}
 

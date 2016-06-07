@@ -24,15 +24,10 @@ public class PairReducer extends Reducer<Pair, IntWritable, Pair, Text> {
 		if (STAR_SYMBOL.equals(pair.getValue().toString())) {
 			total = sum;
 		} else {
-			// double d = new Double(sum)/total;
-			// context.write(pair, new DoubleWritable(d));
-			// DecimalFormat twoDForm = new DecimalFormat("#.00");
-			// twoDForm.format(d); // it will return String
 			sb = new StringBuilder();
 			sb.append(sum).append("/").append(total);
 			context.write(pair, new Text(sb.toString()));
 		}
-		// context.write(pair, new DoubleWritable(new Double(sum)));
 	}
 
 	@Override
