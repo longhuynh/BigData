@@ -2,6 +2,7 @@ package com.hadoop.formatoutput.reducers;
 
 import java.io.IOException;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -24,9 +25,10 @@ public class PairReducer extends Reducer<Pair, IntWritable, Pair, Text> {
 		if (STAR_SYMBOL.equals(pair.getValue().toString())) {
 			total = sum;
 		} else {
+			double d = new Double(sum)/total;
 			sb = new StringBuilder();
 			sb.append(sum).append("/").append(total);
-			context.write(pair, new Text(sb.toString()));
+			context.write(pair, new Text(sb.append(" = ").append(d).toString()));
 		}
 	}
 
