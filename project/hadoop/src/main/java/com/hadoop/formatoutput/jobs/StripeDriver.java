@@ -26,7 +26,7 @@ public class StripeDriver {
 		Path outputPath = new Path(args[1]);
 		
 		Job job = new Job(conf, "wordcountstripe");
-		job.setJarByClass(PairDriver.class);
+		job.setJarByClass(StripeDriver.class);
 		
 		FileInputFormat.addInputPath(job, inputPath);
 		FileOutputFormat.setOutputPath(job, outputPath);
