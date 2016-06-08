@@ -20,7 +20,7 @@ public class WordCountDriver {
 		Path outputPath = new Path(args[1]);
 		
 		Job job = new Job(conf, "wordcount");
-		job.setJarByClass(WordCountDriver.class);
+		job.setJarByClass(WordCountDriver.class);		
 
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);

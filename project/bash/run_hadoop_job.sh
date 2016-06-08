@@ -73,7 +73,8 @@ hadoop fs -put $inputFilesPath* $inputPath
 # Run Hadoop job
 hadoop jar $jarPath $classDriver $inputPath $outputPath
 
-hadoop fs -copyToLocal $outputPath /home/cloudera/$jobName
+# copyToLocal
+# hadoop fs -copyToLocal $outputPath /home/cloudera/$jobName
 
 # View all output files
 hadoop fs -cat $outputPath/*
