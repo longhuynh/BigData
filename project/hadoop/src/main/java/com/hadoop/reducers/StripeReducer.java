@@ -17,8 +17,8 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, Stripe> {
 	@Override
 	protected void reduce(Text w, Iterable<Stripe> stripes, Context context)
 			throws IOException, InterruptedException {
-		int total = 0;
-		int h_t;
+		int marginal = 0;
+		int ht;
 		Stripe stripeHf = new Stripe();
 		Iterator<Writable> iterator;
 		
@@ -30,10 +30,10 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, Stripe> {
 				Text t = (Text) iterator.next();
 				
 				// H{t}
-				h_t = ((IntWritable) stripeH.get(t)).get();
+				ht = ((IntWritable) stripeH.get(t)).get();
 				
-				// increase the total
-				total += h_t;
+				// increase the marginal
+				marginal += ht;
 				
 				// get value of Hf{t} if any, if not, create new element<Text, DoubleWritable>
 				DoubleWritable tempVal = (DoubleWritable) stripeHf.get(t);
@@ -42,7 +42,7 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, Stripe> {
 				if (tempVal == null) {
 					tempVal = ZERO;
 				}
-				tempVal = new DoubleWritable(tempVal.get() + (double)h_t);
+				tempVal = new DoubleWritable(tempVal.get() + (double)ht);
 
 				stripeHf.put(t, tempVal);
 			}
@@ -55,8 +55,8 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, Stripe> {
 			
 			DoubleWritable val = (DoubleWritable) stripeHf.get(t);
 			
-			// update Hf{t} = Hf{t}/total
-			val.set(val.get()/total);
+			// update Hf{t} = Hf{t}/marginal
+			val.set(val.get()/marginal);
 		}
 		context.write(w, stripeHf);
 		

@@ -1,17 +1,16 @@
 package com.hadoop.reducers;
 
-import com.hadoop.dto.Pair;
-
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
+import com.hadoop.dto.Pair;
+
 public class PairReducer extends Reducer<Pair, IntWritable, Pair, DoubleWritable> {
 	private static final String STAR_SYMBOL = "*";
-	private int total;
+	private int marginal;
 	
 	@Override
 	protected void reduce(Pair pair, Iterable<IntWritable> counts, Context context)
@@ -22,10 +21,10 @@ public class PairReducer extends Reducer<Pair, IntWritable, Pair, DoubleWritable
 			sum += count.get();
 		}
 		if (STAR_SYMBOL.equals(pair.getValue().toString())) {
-			total = sum;
+			marginal = sum;
 		}
 		else {
-			double d = new Double(sum)/total;
+			double d = new Double(sum)/marginal;
 			context.write(pair, new DoubleWritable(d));
 		}
 	}
@@ -33,6 +32,6 @@ public class PairReducer extends Reducer<Pair, IntWritable, Pair, DoubleWritable
 	@Override
 	protected void setup(Context context)
 			throws IOException, InterruptedException {
-		total = 0;
+		marginal = 0;
 	}
 }

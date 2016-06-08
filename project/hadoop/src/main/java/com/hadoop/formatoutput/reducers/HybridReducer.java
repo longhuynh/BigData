@@ -33,12 +33,12 @@ public class HybridReducer extends Reducer<Pair, IntWritable, Text, SortedStripe
 			stripeH.put(pairU, new DoubleWritable(sum));
 		}
 		else {
-			DoubleWritable tempVal = (DoubleWritable) stripeH.get(pairU);
-			if (tempVal == null) {
+			DoubleWritable tempValue = (DoubleWritable) stripeH.get(pairU);
+			if (tempValue == null) {
 				stripeH.put(pairU, new DoubleWritable(sum));
 			}
 			else {
-				tempVal.set(tempVal.get() + sum);
+				tempValue.set(tempValue.get() + sum);
 			}
 		}
 		stripeHf.put(pairW, stripeH);
@@ -56,46 +56,42 @@ public class HybridReducer extends Reducer<Pair, IntWritable, Text, SortedStripe
 			throws IOException, InterruptedException {
 		SortedStripe stripeH;
 		SortedStripe newStripeH;
-		Iterator<WritableComparable> it_Hf;
-		Iterator<WritableComparable> it_H;
+		Iterator<WritableComparable> iteratorHf;
+		Iterator<WritableComparable> iteratorH;
 		StringBuffer sb;
-		double total;
+		double marginal;
 		
-		it_Hf = stripeHf.keySet().iterator();
-		while (it_Hf.hasNext()) {
-			Text w = (Text) it_Hf.next();
+		iteratorHf = stripeHf.keySet().iterator();
+		while (iteratorHf.hasNext()) {
+			Text w = (Text) iteratorHf.next();
 			
-			// calculate total
-			total = 0;
+			marginal = 0;
 			stripeH = (SortedStripe) stripeHf.get(w);
-			it_H = stripeH.keySet().iterator();
-			while (it_H.hasNext()) {
-				Text u = (Text) it_H.next();
+			iteratorH = stripeH.keySet().iterator();
+			while (iteratorH.hasNext()) {
+				Text u = (Text) iteratorH.next();
 				
-				total += ((DoubleWritable) stripeH.get(u)).get();
+				marginal += ((DoubleWritable) stripeH.get(u)).get();
 			}
 			
 			// create new H for decoration
 			newStripeH = new SortedStripe();
 			stripeH = (SortedStripe) stripeHf.get(w);
-			it_H = stripeH.keySet().iterator();
-			while (it_H.hasNext()) {
-				Text u = (Text) it_H.next();
+			iteratorH = stripeH.keySet().iterator();
+			while (iteratorH.hasNext()) {
+				Text u = (Text) iteratorH.next();
 				DoubleWritable tmpVal = (DoubleWritable) stripeH.get(u);
 				
-				double h_u = tmpVal.get();
+				double hu = tmpVal.get();
 				sb = new StringBuffer();
-				sb.append((int)h_u).append("/").append((int)total);
+				sb.append((int)hu).append("/").append((int)marginal);
 				newStripeH.put(u, new Text(sb.toString()));
 				
-				// update H{u} = H{u} / total
-				tmpVal.set(tmpVal.get() / total);
+				// update H{u} = H{u} / marginal
+				tmpVal.set(tmpVal.get() / marginal);
 			}
 			// return <Text, Text>
 			context.write(w, newStripeH);
-			
-			// if needed, we can return <Text, DoubleWritable> 
-			//context.write(w, stripeH);
 		}
 	}
 }

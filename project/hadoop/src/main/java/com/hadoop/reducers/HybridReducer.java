@@ -25,25 +25,23 @@ public class HybridReducer extends Reducer<Pair, IntWritable, Text, Stripe> {
 		}
 		
 		// Element-wise sum: SUM(H{p.w}, new Pair(p.u, sum) 
-		Text pair_W = new Text(pair.getKey());
-		Text pair_U = new Text(pair.getValue());
-		Stripe stripeH = (Stripe) stripeHf.get(pair_W);
+		Text pairW = new Text(pair.getKey());
+		Text pairU = new Text(pair.getValue());
+		Stripe stripeH = (Stripe) stripeHf.get(pairW);
 		if (stripeH == null) {
 			stripeH = new Stripe();
-			stripeH.put(pair_U, new DoubleWritable(sum));
+			stripeH.put(pairU, new DoubleWritable(sum));
 		}
 		else {
-//			stripeH.put(pair_U, new DoubleWritable(((DoubleWritable) stripeH.get(pair_U)).get() + sum));
-			DoubleWritable tempVal = (DoubleWritable) stripeH.get(pair_U);
-			if (tempVal == null) {
-				stripeH.put(pair_U, new DoubleWritable(sum));
+			DoubleWritable tempValue = (DoubleWritable) stripeH.get(pairU);
+			if (tempValue == null) {
+				stripeH.put(pairU, new DoubleWritable(sum));
 			}
 			else {
-				tempVal.set(tempVal.get() + sum);
+				tempValue.set(tempValue.get() + sum);
 			}
 		}
-		stripeHf.put(pair_W, stripeH);
-//		context.write(pair.getKey(), stripeHf);
+		stripeHf.put(pairW, stripeH);
 	}
 
 	@Override
@@ -56,32 +54,31 @@ public class HybridReducer extends Reducer<Pair, IntWritable, Text, Stripe> {
 	protected void cleanup(Context context)
 			throws IOException, InterruptedException {
 		Stripe stripeH;
-		Iterator<Writable> it_Hf;
-		Iterator<Writable> it_H;
-		double total;
+		Iterator<Writable> iteratorHf;
+		Iterator<Writable> iteratorH;
+		double marginal;
 		
-		it_Hf = stripeHf.keySet().iterator();
-		while (it_Hf.hasNext()) {
-			Text w = (Text) it_Hf.next();
+		iteratorHf = stripeHf.keySet().iterator();
+		while (iteratorHf.hasNext()) {
+			Text w = (Text) iteratorHf.next();
 			
-			// calculate total
-			total = 0;
+			marginal = 0;
 			stripeH = (Stripe) stripeHf.get(w);
-			it_H = stripeH.keySet().iterator();
-			while (it_H.hasNext()) {
-				Text u = (Text) it_H.next();
+			iteratorH = stripeH.keySet().iterator();
+			while (iteratorH.hasNext()) {
+				Text u = (Text) iteratorH.next();
 				
-				total += ((DoubleWritable) stripeH.get(u)).get();
+				marginal += ((DoubleWritable) stripeH.get(u)).get();
 			}
 			
 			stripeH = (Stripe) stripeHf.get(w);
-			it_H = stripeH.keySet().iterator();
-			while (it_H.hasNext()) {
-				Text u = (Text) it_H.next();
+			iteratorH = stripeH.keySet().iterator();
+			while (iteratorH.hasNext()) {
+				Text u = (Text) iteratorH.next();
 				DoubleWritable tmpVal = (DoubleWritable) stripeH.get(u);
 				
-				// update H{u} = H{u} / total
-				tmpVal.set(tmpVal.get() / total);
+				// update H{u} = H{u} / marginal
+				tmpVal.set(tmpVal.get() / marginal);
 			}
 			// return <Text, DoubleWritable> 
 			context.write(w, stripeH);
