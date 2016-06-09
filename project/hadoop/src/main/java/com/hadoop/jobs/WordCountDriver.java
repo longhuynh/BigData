@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import com.hadoop.mappers.WordCountMapper;
+import com.hadoop.partitioner.WordCountPartitioner;
 import com.hadoop.reducers.WordCountReducer;
 
 public class WordCountDriver {
@@ -23,6 +24,7 @@ public class WordCountDriver {
 
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
+		job.setPartitionerClass(WordCountPartitioner.class);
 
 		job.setMapperClass(WordCountMapper.class);
 		job.setReducerClass(WordCountReducer.class);

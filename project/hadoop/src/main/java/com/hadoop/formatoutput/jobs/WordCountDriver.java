@@ -1,8 +1,5 @@
 package com.hadoop.formatoutput.jobs;
 
-import com.hadoop.formatoutput.reducers.WordCountReducer;
-import com.hadoop.mappers.WordCountMapper;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -11,6 +8,10 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import com.hadoop.formatoutput.reducers.WordCountReducer;
+import com.hadoop.mappers.WordCountMapper;
+import com.hadoop.partitioner.WordCountPartitioner;
 
 public class WordCountDriver {
 
@@ -24,6 +25,7 @@ public class WordCountDriver {
 
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
+		job.setPartitionerClass(WordCountPartitioner.class);
 
 		job.setMapperClass(WordCountMapper.class);
 		job.setReducerClass(WordCountReducer.class);
