@@ -18,7 +18,7 @@ public class CustomerReducer extends Reducer<Text, Item, Text, SortedItem> {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected void reduce(Text w, Iterable<Item> stripes, Context context)
+	protected void reduce(Text w, Iterable<Item> items, Context context)
 			throws IOException, InterruptedException {
 		int marginal = 0;
 		int ht;
@@ -27,14 +27,14 @@ public class CustomerReducer extends Reducer<Text, Item, Text, SortedItem> {
 		Iterator<WritableComparable> sortedIterator;
 		StringBuffer sb;
 
-		for (Item stripeH : stripes) {
-			iterator = stripeH.keySet().iterator();
+		for (Item itemH : items) {
+			iterator = itemH.keySet().iterator();
 
 			while (iterator.hasNext()) {
 				Text t = (Text) iterator.next();
 
 				// H{t}
-				ht = ((IntWritable) stripeH.get(t)).get();
+				ht = ((IntWritable) itemH.get(t)).get();
 
 				marginal += ht;
 

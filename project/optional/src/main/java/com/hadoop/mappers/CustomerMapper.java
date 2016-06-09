@@ -12,7 +12,8 @@ import com.hadoop.dto.Item;
 
 public class CustomerMapper extends Mapper<LongWritable, Text, Text, Item> {
 	private final static IntWritable ONE = new IntWritable(1);
-	private static final Pattern WORD_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
+	private static final Pattern ITEM_BOUNDARY = Pattern.compile("\\s*\\b\\s*");
+	private static final Pattern CUSTOMER_BOUNDARY = Pattern.compile("\\b");
 
 	/*
 	 * Let the neighborhoods of X, N(X) be set of all term after X and before
@@ -22,37 +23,29 @@ public class CustomerMapper extends Mapper<LongWritable, Text, Text, Item> {
 	public void map(LongWritable offset, Text lineText, Context context)
 			throws IOException, InterruptedException {
 		String line = lineText.toString().trim();
-		String[] arr = WORD_BOUNDARY.split(line);
+		String[] customers = CUSTOMER_BOUNDARY.split(line);
 
-		int len = arr.length;
-		int w = 0;
+		int customerLength = customers.length;
 		int u = 0;
-		Item stripeH;
+		Item itemH;
 
-		for (; w < len - 1; w++) {
-			if (arr[w] != null && !arr[w].isEmpty()) {
-				stripeH = new Item();
+		for (int w = 0; w < customerLength - 1; w++) {
+			if (customers[w] != null && !customers[w].isEmpty()) {
+				String[] array = "|".split(customers[w]);
+				String firstName = array[0];
+				String[] items = CUSTOMER_BOUNDARY.split(array[1]);
+				int itemLength = items.length;
 
-				for (u = w + 1; u < len; u++) {
-					if (arr[u] != null && !arr[u].isEmpty()) {
-						if (!arr[w].equals(arr[u])) {
-							Text t = new Text(arr[u]);
-							IntWritable tempInt = (IntWritable) stripeH.get(t);
+				itemH = new Item();
 
-							if (tempInt == null) {
-								tempInt = ONE;
-							} else {
-								tempInt = new IntWritable(tempInt.get() + 1);
-							}
-
-							stripeH.put(t, tempInt);
-						} else {
-							break;
-						}
+				for (u = 0; u < itemLength; u++) {
+					if (items[u] != null && !items[u].isEmpty()) {
+						Text t = new Text(items[u]);
+						itemH.put(t, ONE);
 					}
 				}
 
-				context.write(new Text(arr[w]), stripeH);
+				context.write(new Text(firstName), itemH);
 			}
 		}
 	}

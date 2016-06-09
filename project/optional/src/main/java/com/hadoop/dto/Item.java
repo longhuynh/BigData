@@ -14,9 +14,7 @@ public class Item extends MapWritable {
 		Iterator<Writable> it = keySet().iterator();
 		while (it.hasNext()) {
 			Text t = (Text) it.next();
-			String val = get(t).toString();
-			sb.append("(").append(t.toString()).append(", ").append(val)
-					.append("), ");
+			sb.append(t.toString()).append(", ");
 		}
 		sb.setLength(sb.length() - 2);
 		sb.append(" ]");
