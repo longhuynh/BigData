@@ -1,18 +1,5 @@
 #!/bin/bash
 
-#export JAVA_HOME=/home/cloudera/java/jdk1.8.0_77
-#export M2_HOME=/home/cloudera/softwares/apache-maven-3.3.9
-#export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
-
-############################################
-#   MySH/pre_run_hadoop_job.sh
-############################################
-#sudo su hdfs
-#hadoop fs -mkdir /user/cloudera
-#hadoop fs -chown cloudera /user/cloudera
-#exit
-############################################
-
 ############################################
 #
 # Run Hadoop Spark jobs

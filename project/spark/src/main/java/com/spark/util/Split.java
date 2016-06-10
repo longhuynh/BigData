@@ -1,12 +1,9 @@
-package com.myspark.util;
+package com.spark.util;
 
 import org.apache.spark.api.java.function.FlatMapFunction;
 import java.util.Arrays;
 
 public class Split implements FlatMapFunction<String, String> {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String pattern;
 	
@@ -17,5 +14,4 @@ public class Split implements FlatMapFunction<String, String> {
 	public Iterable<String> call(String arg0) throws Exception {
 		return Arrays.asList(arg0.split(pattern));
 	}
-	
 }
