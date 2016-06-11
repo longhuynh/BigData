@@ -13,12 +13,12 @@ import com.spark.util.Split;
 
 import scala.Tuple2;
 
-public class WordCountPair {
+public class WordCount {
 	// @SuppressWarnings("serial")
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 1) {
-			System.err.println("Usage: JavaWordCount <file>");
+			System.err.println("Usage: WordCountPair <file>");
 			System.exit(1);
 		}
 
