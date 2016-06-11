@@ -1,76 +1,60 @@
 package com.hadoop.reducers;
 
-import com.hadoop.dto.SortedItem;
-import com.hadoop.dto.Item;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class CustomerReducer extends Reducer<Text, Item, Text, SortedItem> {
-	private final static DoubleWritable ZERO = new DoubleWritable(0);
+import com.hadoop.dto.Item;
 
-	@SuppressWarnings("rawtypes")
+public class CustomerReducer extends Reducer<Text, Item, Text, Item> {
+	private final static IntWritable ONE = new IntWritable(1);
+	
 	@Override
 	protected void reduce(Text w, Iterable<Item> items, Context context)
 			throws IOException, InterruptedException {
-		int marginal = 0;
-		int ht;
-		SortedItem stripeHf = new SortedItem();
+
 		Iterator<Writable> iterator;
-		Iterator<WritableComparable> sortedIterator;
-		StringBuffer sb;
-
+		
+		List<Text> intersectionList = new ArrayList<Text>();	
+		
 		for (Item itemH : items) {
-			iterator = itemH.keySet().iterator();
-
+			iterator = itemH.keySet().iterator();		
+			List<Text> texts = new ArrayList<Text>();	
+			
 			while (iterator.hasNext()) {
 				Text t = (Text) iterator.next();
-
-				// H{t}
-				ht = ((IntWritable) itemH.get(t)).get();
-
-				marginal += ht;
-
-				// get value of Hf{t} if any, if not, create new element<Text,
-				// DoubleWritable>
-				DoubleWritable tempValue = (DoubleWritable) stripeHf.get(t);
-
-				// update Hf{t} = Hf{t} + H{t}
-				if (tempValue == null) {
-					tempValue = ZERO;
-				}
-				tempValue = new DoubleWritable(tempValue.get() + (double) ht);
-
-				stripeHf.put(t, tempValue);
+				texts.add(t);				
 			}
-			// context.write(w, stripeH);
-		}
-
-		// return Text instead of DoubleWritable as above
-		SortedItem newHf = new SortedItem();
-		sortedIterator = stripeHf.keySet().iterator();
-		while (sortedIterator.hasNext()) {
-			Text t = (Text) sortedIterator.next();
-
-			DoubleWritable tempVal = (DoubleWritable) stripeHf.get(t);
 			
-			double d = tempVal.get();
-			sb = new StringBuffer();
-			newHf.put(t, new Text(sb.append(String.valueOf((int) d))
-					.append("/").append(String.valueOf(marginal)).toString()));
-
-			// update Hf{t} = Hf{t}/total
-			tempVal.set(tempVal.get() / marginal);
+			intersectionList = intersection(texts, intersectionList);
 		}
-		context.write(w, newHf);
-		// if needed, you can return DoubleWritable whenever you want
-		// context.write(w, stripeHf);
+
+		Item newH = new Item();
+		
+		for(Text t : intersectionList){
+			newH.put(t,ONE);
+		}		
+		context.write(w, newH);
+	}
+
+	public <T> List<T> intersection(List<T> list1, List<T> list2) {
+		if(list2.size() == 0)
+			return list1;
+		
+		List<T> list = new ArrayList<T>();
+
+		for (T t : list1) {
+			if (list2.contains(t)) {
+				list.add(t);
+			}
+		}
+
+		return list;
 	}
 }
