@@ -45,21 +45,17 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, Stripe> {
 				tempVal = new DoubleWritable(tempVal.get() + (double)ht);
 
 				stripeHf.put(t, tempVal);
-			}
-			//context.write(w, stripeH);
+			}			
 		}
 		
 		iterator = stripeHf.keySet().iterator();
 		while (iterator.hasNext()) {
-			Text t = (Text) iterator.next();
-			
+			Text t = (Text) iterator.next();			
 			DoubleWritable val = (DoubleWritable) stripeHf.get(t);
 			
 			// update Hf{t} = Hf{t}/marginal
 			val.set(val.get()/marginal);
 		}
-		context.write(w, stripeHf);
-		
+		context.write(w, stripeHf);		
 	}
-
 }

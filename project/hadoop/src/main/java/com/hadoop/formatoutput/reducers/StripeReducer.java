@@ -35,7 +35,6 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, SortedStripe> {
 
 				// H{t}
 				ht = ((IntWritable) stripeH.get(t)).get();
-
 				marginal += ht;
 
 				// get value of Hf{t} if any, if not, create new element<Text,
@@ -47,10 +46,8 @@ public class StripeReducer extends Reducer<Text, Stripe, Text, SortedStripe> {
 					tempValue = ZERO;
 				}
 				tempValue = new DoubleWritable(tempValue.get() + (double) ht);
-
 				stripeHf.put(t, tempValue);
 			}
-			// context.write(w, stripeH);
 		}
 
 		// return Text instead of DoubleWritable as above

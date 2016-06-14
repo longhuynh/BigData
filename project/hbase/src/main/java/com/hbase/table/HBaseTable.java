@@ -26,16 +26,11 @@ public class HBaseTable {
 	private static Configuration conf = null;
 	private static HBaseAdmin admin;
 	private static HTable table;
-	/**
-	 * Initialization
-	 */
+
 	static {
 		conf = HBaseConfiguration.create();
 	}
 
-	/**
-	 * Create a table
-	 */
 	@SuppressWarnings("deprecation")
 	public static void creatTable(String tableName, String[] familys)
 			throws Exception {
@@ -43,18 +38,16 @@ public class HBaseTable {
 		if (admin.tableExists(tableName)) {
 			System.out.println("Table already exists!");
 		} else {
-			HTableDescriptor tableDesc = new HTableDescriptor(tableName);
+			HTableDescriptor tableDescriptor = new HTableDescriptor(tableName);
 			for (int i = 0; i < familys.length; i++) {
-				tableDesc.addFamily(new HColumnDescriptor(familys[i]));
+				tableDescriptor.addFamily(new HColumnDescriptor(familys[i]));
 			}
-			admin.createTable(tableDesc);
+			admin.createTable(tableDescriptor);
 			System.out.println("Create table " + tableName + " ok.");
 		}
 	}
 
-	/**
-	 * Delete a table
-	 */
+
 	public static void deleteTable(String tableName) throws Exception {
 		try {
 			admin = new HBaseAdmin(conf);
@@ -68,9 +61,6 @@ public class HBaseTable {
 		}
 	}
 
-	/**
-	 * Put (or insert) a row
-	 */
 	public static void addRecord(String tableName, String rowKey,
 			String family, String qualifier, String value) throws Exception {
 		try {
@@ -86,9 +76,6 @@ public class HBaseTable {
 		}
 	}
 
-	/**
-	 * Delete a row
-	 */
 	public static void deleteRecord(String tableName, String rowKey)
 			throws IOException {
 		table = new HTable(conf, tableName);
@@ -99,9 +86,6 @@ public class HBaseTable {
 		System.out.println("Delete recored " + rowKey + " ok.");
 	}
 
-	/**
-	 * Get a row
-	 */
 	@SuppressWarnings("deprecation")
 	public static void getOneRecord(String tableName, String rowKey)
 			throws IOException {
@@ -111,15 +95,11 @@ public class HBaseTable {
 		for (KeyValue kv : rs.raw()) {
 			System.out.print(new String(kv.getRow()) + " ");
 			System.out.print(new String(kv.getFamily()) + ":");
-			System.out.print(new String(kv.getQualifier()) + " ");
-			System.out.print(kv.getTimestamp() + " ");
+			System.out.print(new String(kv.getQualifier()) + " ");			
 			System.out.println(new String(kv.getValue()));
 		}
 	}
 
-	/**
-	 * Scan (or list) a table
-	 */
 	@SuppressWarnings("deprecation")
 	public static void getAllRecord(String tableName) {
 		try {
@@ -130,8 +110,7 @@ public class HBaseTable {
 				for (KeyValue kv : r.raw()) {
 					System.out.print(new String(kv.getRow()) + " ");
 					System.out.print(new String(kv.getFamily()) + ":");
-					System.out.print(new String(kv.getQualifier()) + " ");
-					System.out.print(kv.getTimestamp() + " ");
+					System.out.print(new String(kv.getQualifier()) + " ");					
 					System.out.println(new String(kv.getValue()));
 				}
 			}
@@ -144,19 +123,16 @@ public class HBaseTable {
 		try {
 			String tableName = "scores";
 			String[] columns = { "grade", "course" };
-			HBaseTable.deleteTable(tableName);
+			//HBaseTable.deleteTable(tableName);
 			HBaseTable.creatTable(tableName, columns);
 
 			// add record record1
-			HBaseTable.addRecord(tableName, "record1", "grade", "", "5");
-			HBaseTable.addRecord(tableName, "record1", "course", "", "90");
-			HBaseTable.addRecord(tableName, "record1", "course", "math", "97");
-			HBaseTable.addRecord(tableName, "record1", "course", "bigdata",
-					"92");
-
+			HBaseTable.addRecord(tableName, "record1", "grade", "", "92");
+			HBaseTable.addRecord(tableName, "record1", "course", "bigdata", "");
+			
 			// add record record2
-			HBaseTable.addRecord(tableName, "record2", "grade", "", "4");
-			HBaseTable.addRecord(tableName, "record2", "course", "math", "89");
+			HBaseTable.addRecord(tableName, "record2", "grade", "", "89");
+			HBaseTable.addRecord(tableName, "record2", "course", "math", "");
 
 			System.out.println("===========Get one record========");
 			HBaseTable.getOneRecord(tableName, "record1");
@@ -165,7 +141,7 @@ public class HBaseTable {
 			HBaseTable.getAllRecord(tableName);
 
 			System.out.println("===========Delete one record========");
-			HBaseTable.deleteRecord(tableName, "record2");
+			//HBaseTable.deleteRecord(tableName, "record2");
 			HBaseTable.getAllRecord(tableName);
 
 			System.out.println("===========Show all record========");
